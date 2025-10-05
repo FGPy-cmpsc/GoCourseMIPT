@@ -59,7 +59,7 @@ type StorageInterface interface {
 
 type Library struct {
 	Storage   StorageInterface
-	GetIdFunc func(string) uint64
+	GetIDFunc func(string) uint64
 }
 
 func HashStr(str string) uint64 {
@@ -83,12 +83,12 @@ func AdvancedHash(str string) uint64 {
 
 func (library *Library) AddBook(name, author, edit string) {
 	book := Book{name, author, edit}
-	new_key := library.GetIdFunc(name)
+	new_key := library.GetIDFunc(name)
 	library.Storage.AddBook(book, new_key)
 }
 
 func (library *Library) GetBook(str string) Book {
-	book_key := library.GetIdFunc(str)
+	book_key := library.GetIDFunc(str)
 	book := library.Storage.GetBook(book_key)
 	if book == (Book{}) {
 		fmt.Println("Error: No book named " + str)
@@ -104,7 +104,7 @@ func main() {
 
 	books1 := [][]string{{"War and Peace", "Tolstoy", "ECSMO"}, {"Anna Karenina", "Tolstoy", "AST"}, {"Doctor Zhivago", "Pasternak", "AST"}, {"The Brothers Karamazov", "Dostoyevsky", "EBook"}}
 
-	library := &Library{Storage: &sliceStorage, GetIdFunc: HashStr}
+	library := &Library{Storage: &sliceStorage, GetIDFunc: HashStr}
 	for _, book_info := range books1 {
 		library.AddBook(book_info[0], book_info[1], book_info[2])
 	}
@@ -114,7 +114,7 @@ func main() {
 	}
 
 	library.Storage = &mapStorage
-	library.GetIdFunc = AdvancedHash
+	library.GetIDFunc = AdvancedHash
 	books3 := [][]string{{"A Hero Of Our Time", "Lermontov", "Azbuka"}, {"The Master and Margarita", "Bulgakov", "AST"}, {"Dead Souls", "Gogol", "Myf"}}
 	for _, book_info := range books3 {
 		library.AddBook(book_info[0], book_info[1], book_info[2])
