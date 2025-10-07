@@ -27,10 +27,6 @@ func (sliceStorage *SliceStorage) AddBook(book Book, hash uint64) {
 	sliceStorage.Storage[hash%uint64(len(sliceStorage.Storage))] = book
 }
 
-func (sliceStorage *SliceStorage) RemoveBook(hash uint64) {
-	sliceStorage.Storage[hash%uint64(len(sliceStorage.Storage))] = Book{}
-}
-
 type MapStorage struct {
 	Storage map[uint64]Book
 }
@@ -47,14 +43,9 @@ func (mapStorage *MapStorage) AddBook(book Book, hash uint64) {
 	mapStorage.Storage[hash] = book
 }
 
-func (mapStorage *MapStorage) RemoveBook(hash uint64) {
-	delete(mapStorage.Storage, hash)
-}
-
 type StorageInterface interface {
 	GetBook(uint64) Book
 	AddBook(Book, uint64)
-	RemoveBook(uint64)
 }
 
 type Library struct {
@@ -83,18 +74,17 @@ func AdvancedHash(str string) uint64 {
 
 func (library *Library) AddBook(name, author, edit string) {
 	book := Book{name, author, edit}
-	new_key := library.GetIDFunc(name)
-	library.Storage.AddBook(book, new_key)
+	newKey := library.GetIDFunc(name)
+	library.Storage.AddBook(book, newKey)
 }
 
 func (library *Library) GetBook(str string) Book {
-	book_key := library.GetIDFunc(str)
-	book := library.Storage.GetBook(book_key)
+	bookKey := library.GetIDFunc(str)
+	book := library.Storage.GetBook(bookKey)
 	if book == (Book{}) {
 		fmt.Println("Error: No book named " + str)
 		return book
 	}
-	library.Storage.RemoveBook(book_key)
 	return book
 }
 
@@ -105,22 +95,22 @@ func main() {
 	books1 := [][]string{{"War and Peace", "Tolstoy", "ECSMO"}, {"Anna Karenina", "Tolstoy", "AST"}, {"Doctor Zhivago", "Pasternak", "AST"}, {"The Brothers Karamazov", "Dostoyevsky", "EBook"}}
 
 	library := &Library{Storage: &sliceStorage, GetIDFunc: HashStr}
-	for _, book_info := range books1 {
-		library.AddBook(book_info[0], book_info[1], book_info[2])
+	for _, bookInfo := range books1 {
+		library.AddBook(bookInfo[0], bookInfo[1], bookInfo[2])
 	}
 	books2 := []string{"War and Peace", "Crime and Punishment", "Doctor Zhivago", "The Brothers Karamazov"}
-	for _, book_name := range books2 {
-		fmt.Println(library.GetBook(book_name))
+	for _, bookName := range books2 {
+		fmt.Println(library.GetBook(bookName))
 	}
 
 	library.Storage = &mapStorage
 	library.GetIDFunc = AdvancedHash
 	books3 := [][]string{{"A Hero Of Our Time", "Lermontov", "Azbuka"}, {"The Master and Margarita", "Bulgakov", "AST"}, {"Dead Souls", "Gogol", "Myf"}}
-	for _, book_info := range books3 {
-		library.AddBook(book_info[0], book_info[1], book_info[2])
+	for _, bookInfo := range books3 {
+		library.AddBook(bookInfo[0], bookInfo[1], bookInfo[2])
 	}
 	books4 := []string{"Crime and Punishment", "The Master and Margarita"}
-	for _, book_name := range books4 {
-		fmt.Println(library.GetBook(book_name).GetInfo())
+	for _, bookName := range books4 {
+		fmt.Println(library.GetBook(bookName).GetInfo())
 	}
 }
