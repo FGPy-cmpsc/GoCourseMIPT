@@ -32,6 +32,8 @@ func postJSON(c *http.Client, url, jsonBody string) (string, error) {
 	return string(b), err
 }
 
+const Timeout = 15
+
 func main() {
 	base := "http://localhost:8080"
 	httpClient := &http.Client{}
@@ -47,7 +49,7 @@ func main() {
 	_ = json.Unmarshal([]byte(out), &resp)
 	fmt.Println(resp.OutputString)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), Timeout*time.Second)
 	defer cancel()
 	req, _ := http.NewRequestWithContext(ctx, http.MethodGet, base+"/hard-op", nil)
 
