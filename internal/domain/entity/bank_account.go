@@ -12,6 +12,9 @@ func (bankAccount *BankAccount) GetBalance() int64 {
 }
 
 func (bankAccount *BankAccount) TransferTo(receiverBackAccount *BankAccount, amount int64) error {
+	if receiverBackAccount.ID == bankAccount.ID {
+		return errors.New("self-translations are prohibited")
+	}
 	if amount <= 0 {
 		return errors.New("forbidden non-positive amount to transfer")
 	}
