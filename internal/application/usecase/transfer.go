@@ -1,5 +1,10 @@
 package usecase
 
+import (
+	"bank/internal/domain/entity"
+	"errors"
+)
+
 type TransferUseCase struct {
 	dbManager DBAccountManager
 }
@@ -15,6 +20,9 @@ type TransferInput struct {
 }
 
 func (transferUC *TransferUseCase) Execute(input TransferInput) error {
+	if input.SenderID == input.ReceiverID {
+		return errors.New("self-translations are prohibited")
+	}
 	sender, err := transferUC.dbManager.GetBankAccount(input.SenderID)
 	if err != nil {
 		return err
@@ -27,11 +35,7 @@ func (transferUC *TransferUseCase) Execute(input TransferInput) error {
 	if err != nil {
 		return err
 	}
-	err = transferUC.dbManager.SaveBankAccount(sender)
-	if err != nil {
-		return err
-	}
-	err = transferUC.dbManager.SaveBankAccount(receiver)
+	err = transferUC.dbManager.SaveBankAccountsTransaction([]*entity.BankAccount{sender, receiver})
 	if err != nil {
 		return err
 	}
