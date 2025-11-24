@@ -3,7 +3,6 @@ package api
 import (
 	"bank/internal/application/usecase"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -21,7 +20,6 @@ type DepositRequest struct {
 }
 
 func (depositHandler *DepositHandler) Deposit(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("in Deposit handler")
 	var req DepositRequest
 	defer r.Body.Close()
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
