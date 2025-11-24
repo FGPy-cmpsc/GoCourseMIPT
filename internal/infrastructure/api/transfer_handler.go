@@ -3,7 +3,6 @@ package api
 import (
 	"bank/internal/application/usecase"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -22,7 +21,6 @@ type TransferRequest struct {
 }
 
 func (transferHandler *TransferHandler) Transfer(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("in Transfer handler")
 	var req TransferRequest
 	defer r.Body.Close()
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
