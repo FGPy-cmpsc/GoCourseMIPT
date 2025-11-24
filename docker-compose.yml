@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  bank-service:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./cmd/database.txt:/app/cmd/database.txt
