@@ -3,7 +3,6 @@ package api
 import (
 	"bank/internal/application/usecase"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -24,7 +23,6 @@ type GetBalanceResponse struct {
 }
 
 func (balanceHandler *BalanceHandler) GetBalance(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("in GetBalance handler")
 	var req GetBalanceRequest
 	defer r.Body.Close()
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -38,6 +36,5 @@ func (balanceHandler *BalanceHandler) GetBalance(w http.ResponseWriter, r *http.
 	}
 	resp := GetBalanceResponse{Balance: out.Balance}
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Println(out.Balance)
 	_ = json.NewEncoder(w).Encode(resp)
 }
