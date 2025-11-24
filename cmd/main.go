@@ -4,7 +4,6 @@ import (
 	"bank/internal/application/usecase"
 	"bank/internal/infrastructure/api"
 	"bank/internal/infrastructure/db"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -27,8 +26,6 @@ func main() {
 	mux := http.NewServeMux()
 
 	fileDB := db.NewFileDB(file)
-
-	fmt.Println("in main")
 
 	getBalanceUC := usecase.NewGetBalanceUseCase(fileDB)
 	getBalanceHandler := api.NewBalanceHandler(getBalanceUC)
